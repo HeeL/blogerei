@@ -1,0 +1,16 @@
+New log file opened at Sat Jul 04 21:09:19 CEST 2015 by 43511@sp.local
+Taking next connection to: 51566
+New client attempting to connect on port: 51567-51566
+  Address = /192.168.0.10:51566
+This client on port 51567 has uuid 2a624e2e-83a1-4fac-a7d2-db8a0cead07d configName activator humanReadableName Activator protocolVersion 3 featureTags Vector()
+Connected Clients: activator-2a624e2e-83a1-4fac-a7d2-db8a0cead07d
+Taking next connection to: 51566
+Checking to see if clients are empty...
+We have 1 non-daemon clients, continuing serving connections.
+Taking next connection to: 51566
+Checking to see if clients are empty...
+We have 1 non-daemon clients, continuing serving connections.
+Taking next connection to: 51566
+Checking to see if clients are empty...
+We have 1 non-daemon clients, continuing serving connections.
+Taking next connection to: 51566
