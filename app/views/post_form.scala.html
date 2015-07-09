@@ -1,0 +1,22 @@
+@main("Post") {
+<form action="@routes.Posts.create" method="post">
+    <div class="form-group">
+        <label for="post_title">Title</label>
+        <input type="text" class="form-control" id="post_title" name="post_title" placeholder="Title">
+    </div>
+    <div class="form-group">
+        <label for="post_task">Task</label>
+        <textarea class="form-control" rows="15" name="post_task" id="post_task" placeholder="Task"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="post_solution">Solution</label>
+        <textarea class="form-control" rows="15" name="post_solution" id="post_solution" placeholder="Solution"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="post_tests">Tests</label>
+        <textarea class="form-control" rows="15" name="post_tests" id="post_tests" placeholder="Tests"></textarea>
+    </div>
+    <button type="submit" class="btn btn-success btn-lg pull-right">Save</button>
+</form>
+
+}

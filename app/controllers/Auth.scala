@@ -5,15 +5,15 @@ import play.api.mvc._
 
 class Auth extends Controller {
 
-  def sign_in_form = Action {
+  def signInForm = Action {
     Ok(views.html.sign_in_form())
   }
 
-  def sign_in = Action {
+  def signIn = Action {
     if (true)
       Redirect(routes.Posts.index())
     else
-      Redirect(routes.Auth.sign_in_form())
+      Redirect(routes.Auth.signInForm())
   }
 
 }

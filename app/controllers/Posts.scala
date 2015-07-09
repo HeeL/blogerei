@@ -9,8 +9,28 @@ class Posts extends Controller {
     Ok(views.html.index())
   }
 
-  def show(id: Int) = Action {
+  def show(id: Long) = Action {
     Ok(views.html.show())
+  }
+
+  def newPost = Action {
+    Ok(views.html.post_form())
+  }
+
+  def create = Action {
+    Redirect(routes.Auth.signInForm())
+  }
+
+  def edit(id: Long) = Action {
+    Ok(views.html.post_form())
+  }
+
+  def update(id: Long) = Action {
+    Redirect(routes.Auth.signInForm())
+  }
+
+  def delete(id: Long) = Action {
+    Redirect(routes.Auth.signInForm())
   }
 
 }
