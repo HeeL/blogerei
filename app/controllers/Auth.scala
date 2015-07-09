@@ -9,7 +9,7 @@ class Auth extends Controller {
     Ok(views.html.sign_in_form())
   }
 
-  def sign_in = Action { implicit request =>
+  def sign_in = Action {
     if (true)
       Redirect(routes.Posts.index())
     else
