@@ -1,4 +1,4 @@
-@(title: String)(content: Html)
+@(title: String, page_name: String = "")(content: Html)
 
 <!DOCTYPE html>
 <html lang="en" data-ember-extension="1"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -39,8 +39,8 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="@routes.Posts.index()">Posts</a></li>
-                <li><a href="@routes.Application.about()">About</a></li>
+                <li @if(page_name == "posts"){class="active"}><a href="@routes.Posts.index()">Posts</a></li>
+                <li @if(page_name == "about"){class="active"}><a href="@routes.Application.about()">About</a></li>
             </ul>
             <ul class="nav navbar-nav pull-right">
                 <li><a href="@routes.Posts.newPost()">New Post</a></li>
