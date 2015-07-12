@@ -7,6 +7,7 @@ import play.api.data._
 import play.api.data.Forms._
 import play.api.mvc._
 import play.api.Play.current
+import play.api.i18n.Messages.Implicits._
 import play.api.mvc.BodyParsers._
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.db.slick.HasDatabaseConfig
@@ -26,13 +27,9 @@ class Posts extends Controller with PostTable with HasDatabaseConfig[JdbcProfile
     Ok(views.html.show())
   }
 
-  def newPost = Action {
-    Ok(views.html.post_form())
-  }
-
   val postForm = Form(
     mapping(
-      "id" -> number,
+      "id" -> ignored(1),
       "title" -> nonEmptyText,
       "task" -> nonEmptyText,
       "solution" -> nonEmptyText,
@@ -41,10 +38,14 @@ class Posts extends Controller with PostTable with HasDatabaseConfig[JdbcProfile
     )(Post.apply)(Post.unapply)
   )
 
+  def newPost = Action {
+    Ok(views.html.post_form(postForm))
+  }
+
   def create = Action.async { implicit request =>
     postForm.bindFromRequest.fold(
       formWithErrors => {
-        concurrent.Future { BadRequest(views.html.post_form()) }
+        concurrent.Future { BadRequest(views.html.post_form(formWithErrors)) }
       },
       post => {
         db.run(posts += post).map(_ => Redirect(routes.Posts.index))
@@ -53,7 +54,7 @@ class Posts extends Controller with PostTable with HasDatabaseConfig[JdbcProfile
   }
 
   def edit(id: Long) = Action {
-    Ok(views.html.post_form())
+    Ok(views.html.post_form(postForm))
   }
 
   def update(id: Long) = Action {
