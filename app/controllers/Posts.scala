@@ -30,8 +30,20 @@ class Posts extends Controller with PostTable with HasDatabaseConfig[JdbcProfile
     Ok(views.html.post_form())
   }
 
-  def create = Action {
-    Redirect(routes.Auth.signInForm())
+  val postForm = Form(
+    mapping(
+      "id" -> number,
+      "title" -> text,
+      "task" -> text,
+      "solution" -> text,
+      "solution2" -> optional(text),
+      "tests" -> optional(text)
+    )(Post.apply)(Post.unapply)
+  )
+
+  def create = Action.async { implicit request =>
+    val post = postForm.bindFromRequest.get
+    db.run(posts += post).map(_ => Redirect(routes.Posts.index))
   }
 
   def edit(id: Long) = Action {
