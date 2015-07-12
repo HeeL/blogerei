@@ -3,7 +3,7 @@ GET    /                           controllers.Posts.index
 GET    /posts/new                  controllers.Posts.newPost
 POST   /posts                      controllers.Posts.create
 GET    /posts/:id/edit             controllers.Posts.edit(id: Int)
-PUT    /posts/:id                  controllers.Posts.update(id: Int)
+POST   /posts/:id/update           controllers.Posts.update(id: Int)
 GET    /posts/:id/delete           controllers.Posts.delete(id: Int)
 GET    /posts/:id                  controllers.Posts.show(id: Int)
 

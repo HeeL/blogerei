@@ -54,8 +54,9 @@ class Posts extends Controller with PostTable with HasDatabaseConfig[JdbcProfile
     )
   }
 
-  def edit(id: Int) = Action {
-    Ok(views.html.post_form(postForm))
+  def edit(id: Int) = Action.async {
+    val post = posts.filter(_.id === id)
+    db.run(post.result.headOption).map(res => Ok(views.html.post_form(postForm.fill(res.get), id)))
   }
 
   def update(id: Int) = Action {

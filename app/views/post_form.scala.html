@@ -1,8 +1,8 @@
-@(postForm: Form[Post])(implicit messages: Messages)
+@(postForm: Form[Post], post_id: Int = 0)(implicit messages: Messages)
 
 @main("Post", "posts") {
 
-@helper.form(action = routes.Posts.create()) {
+@helper.form(action = if(post_id > 0) routes.Posts.update(post_id) else routes.Posts.create()) {
     @helper.inputText(postForm("title"), 'class -> "form-control")
     @helper.textarea(postForm("task"), 'rows -> "15", 'class -> "form-control")
     @helper.textarea(postForm("solution"), 'rows -> "15", 'class -> "form-control")
