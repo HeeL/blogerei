@@ -6,25 +6,23 @@ import slick.driver._
 
 trait PostTable {
 
-  class Posts(tag: Tag) extends Table[Post](tag, "POSTS") {
+  class Posts(tag: Tag) extends Table[Post](tag, "posts") {
 
-    def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
+    def id = column[Int]("id", O.PrimaryKey, O.AutoInc)
 
-    def title = column[String]("TITLE")
+    def title = column[String]("title")
 
-    def task = column[String]("TASK")
+    def task = column[String]("task")
 
-    def solution = column[String]("SOLUTION")
+    def solution = column[String]("solution")
 
-    def solution2 = column[Option[String]]("SOLUTION2")
+    def solution2 = column[Option[String]]("solution2")
 
-    def tests = column[String]("TESTS")
+    def tests = column[Option[String]]("tests")
 
     def * = (id, title, task, solution, solution2, tests) <> ((Post.apply _).tupled, Post.unapply)
   }
 
   val posts = TableQuery[Posts]
-
-  posts.schema.create
 
 }
