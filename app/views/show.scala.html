@@ -1,82 +1,32 @@
-@main("Post Title") {
-<h1>Post Title</h1>
-<p>
-    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-    industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled
-    it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic
-    typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
-    containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including
-    versions of Lorem Ipsum.
-</p>
-<h2>Solution</h2>
-<p>
-    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-    industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled
-    it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic
-    typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets
-    containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including
-    versions of Lorem Ipsum.
-</p>
-<p>
-    Here is an example of code:
-    <pre><code class="scala">
+@(post: Post)
 
-    package controllers
+@main("Post Title", "posts") {
+    <h1>@post.title</h1>
+    <p>@post.task</p>
 
-    import play.api._
-    import play.api.mvc._
+    <h2>Solution</h2>
+    <p>@post.solution</p>
 
-    class Posts extends Controller {
-
-    def index = Action {
-    Ok(views.html.index())
+    @if(post.solution2 != None) {
+        <h2>Alternative Solution</h2>
+        <p>@post.solution2</p>
     }
 
-    def show = Action {
-    Ok(views.html.show())
+    @if(post.tests != None) {
+        <h2>Tests</h2>
+        <p>@post.tests</p>
     }
 
-    }
-    </code></pre>
+    <script>hljs.initHighlightingOnLoad();</script>
 
-</p>
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        var disqus_shortname = 'Blogerei';
 
-<h2>Tests</h2>
-<p>
-    Here are the tests that should pass:
-    <pre><code class="scala">
-
-    package controllers
-
-    import play.api._
-    import play.api.mvc._
-
-    class Posts extends Controller {
-
-    def index = Action {
-    Ok(views.html.index())
-    }
-
-    def show = Action {
-    Ok(views.html.show())
-    }
-
-    }
-    </code></pre>
-</p>
-<script>hljs.initHighlightingOnLoad();</script>
-
-
-
-<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'Blogerei';
-
-    (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-</script>
-
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
 }

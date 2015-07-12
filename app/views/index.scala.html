@@ -5,9 +5,7 @@
         <h2>
             <a href="@routes.Posts.show(post.id)">@post.title</a>
         </h2>
-        <p>
-            @Html(post.task.replaceAll("\n", "<br/>"))
-        </p>
+        <p>@post.task</p>
     }
 
 }

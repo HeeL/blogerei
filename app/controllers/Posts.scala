@@ -23,8 +23,9 @@ class Posts extends Controller with PostTable with HasDatabaseConfig[JdbcProfile
     db.run(posts.result).map(res => Ok(views.html.index(res.toList)))
   }
 
-  def show(id: Long) = Action {
-    Ok(views.html.show())
+  def show(id: Int) = Action.async {
+    val post = posts.filter(_.id === id)
+    db.run(posts.result.headOption).map(res => Ok(views.html.show(res.get)))
   }
 
   val postForm = Form(
