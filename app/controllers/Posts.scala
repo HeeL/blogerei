@@ -59,8 +59,16 @@ class Posts extends Controller with PostTable with HasDatabaseConfig[JdbcProfile
     db.run(post.result.headOption).map(res => Ok(views.html.post_form(postForm.fill(res.get), id)))
   }
 
-  def update(id: Int) = Action {
-    Redirect(routes.Auth.signInForm())
+  def update(id: Int) = Action.async { implicit request =>
+    val edit_post = posts.filter(_.id === id)
+    postForm.bindFromRequest.fold(
+      formWithErrors => {
+        concurrent.Future { BadRequest(views.html.post_form(formWithErrors, id)) }
+      },
+      post => {
+        db.run(edit_post.update(post.copy(id = id))).map(_ => Redirect(routes.Posts.index))
+      }
+    )
   }
 
   def delete(id: Int) = Action.async {
