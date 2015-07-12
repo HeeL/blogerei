@@ -33,17 +33,23 @@ class Posts extends Controller with PostTable with HasDatabaseConfig[JdbcProfile
   val postForm = Form(
     mapping(
       "id" -> number,
-      "title" -> text,
-      "task" -> text,
-      "solution" -> text,
+      "title" -> nonEmptyText,
+      "task" -> nonEmptyText,
+      "solution" -> nonEmptyText,
       "solution2" -> optional(text),
       "tests" -> optional(text)
     )(Post.apply)(Post.unapply)
   )
 
   def create = Action.async { implicit request =>
-    val post = postForm.bindFromRequest.get
-    db.run(posts += post).map(_ => Redirect(routes.Posts.index))
+    postForm.bindFromRequest.fold(
+      formWithErrors => {
+        concurrent.Future { BadRequest(views.html.post_form()) }
+      },
+      post => {
+        db.run(posts += post).map(_ => Redirect(routes.Posts.index))
+      }
+    )
   }
 
   def edit(id: Long) = Action {
