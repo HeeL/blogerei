@@ -24,8 +24,7 @@ class Posts extends Controller with PostTable with HasDatabaseConfig[JdbcProfile
   }
 
   def show(id: Int) = Action.async {
-    val post = posts.filter(_.id === id)
-    db.run(post.result.headOption).map(res => Ok(views.html.show(res.get)))
+    db.run(getPost(id).result.headOption).map(res => Ok(views.html.show(res.get)))
   }
 
   val postForm = Form(
@@ -49,31 +48,28 @@ class Posts extends Controller with PostTable with HasDatabaseConfig[JdbcProfile
         concurrent.Future { BadRequest(views.html.post_form(formWithErrors)) }
       },
       post => {
-        db.run(posts += post).map(_ => Redirect(routes.Posts.index))
+        db.run(createPost(post)).map(_ => Redirect(routes.Posts.index))
       }
     )
   }
 
   def edit(id: Int) = Action.async {
-    val post = posts.filter(_.id === id)
-    db.run(post.result.headOption).map(res => Ok(views.html.post_form(postForm.fill(res.get), id)))
+    db.run(getPost(id).result.headOption).map(res => Ok(views.html.post_form(postForm.fill(res.get), id)))
   }
 
   def update(id: Int) = Action.async { implicit request =>
-    val edit_post = posts.filter(_.id === id)
     postForm.bindFromRequest.fold(
       formWithErrors => {
         concurrent.Future { BadRequest(views.html.post_form(formWithErrors, id)) }
       },
       post => {
-        db.run(edit_post.update(post.copy(id = id))).map(_ => Redirect(routes.Posts.index))
+        db.run(updatePost(id, post)).map(_ => Redirect(routes.Posts.index))
       }
     )
   }
 
   def delete(id: Int) = Action.async {
-    val post = posts.filter(_.id === id)
-    db.run(post.result).map(_ => Redirect(routes.Posts.index))
+    db.run(getPost(id).result).map(_ => Redirect(routes.Posts.index))
   }
 
 }

@@ -25,4 +25,10 @@ trait PostTable {
 
   val posts = TableQuery[Posts]
 
+  def getPost(id: Int) = posts.filter(_.id === id)
+
+  def updatePost(post_id: Int, post: Post) = getPost(post_id).update(post.copy(id = post_id))
+
+  def createPost(post: Post) = posts += post
+
 }
