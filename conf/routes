@@ -2,10 +2,10 @@
 GET    /                           controllers.Posts.index
 GET    /posts/new                  controllers.Posts.newPost
 POST   /posts                      controllers.Posts.create
-GET    /posts/:id/edit             controllers.Posts.edit(id: Long)
-PUT    /posts/:id                  controllers.Posts.update(id: Long)
-DELETE /posts/:id                  controllers.Posts.delete(id: Long)
-GET    /posts/:id                  controllers.Posts.show(id: Long)
+GET    /posts/:id/edit             controllers.Posts.edit(id: Int)
+PUT    /posts/:id                  controllers.Posts.update(id: Int)
+DELETE /posts/:id                  controllers.Posts.delete(id: Int)
+GET    /posts/:id                  controllers.Posts.show(id: Int)
 
 # About
 GET    /about                      controllers.Application.about
