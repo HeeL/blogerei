@@ -25,7 +25,7 @@ class Posts extends Controller with PostTable with HasDatabaseConfig[JdbcProfile
 
   def show(id: Int) = Action.async {
     val post = posts.filter(_.id === id)
-    db.run(posts.result.headOption).map(res => Ok(views.html.show(res.get)))
+    db.run(post.result.headOption).map(res => Ok(views.html.show(res.get)))
   }
 
   val postForm = Form(
@@ -54,16 +54,17 @@ class Posts extends Controller with PostTable with HasDatabaseConfig[JdbcProfile
     )
   }
 
-  def edit(id: Long) = Action {
+  def edit(id: Int) = Action {
     Ok(views.html.post_form(postForm))
   }
 
-  def update(id: Long) = Action {
+  def update(id: Int) = Action {
     Redirect(routes.Auth.signInForm())
   }
 
-  def delete(id: Long) = Action {
-    Redirect(routes.Auth.signInForm())
+  def delete(id: Int) = Action.async {
+    val post = posts.filter(_.id === id)
+    db.run(post.result).map(_ => Redirect(routes.Posts.index))
   }
 
 }
