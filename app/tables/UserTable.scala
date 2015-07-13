@@ -19,6 +19,6 @@ trait UserTable {
 
   val users = TableQuery[Users]
 
-  def findUser(email: String, password: String) = users.filter(_.email === email && _.password === password)
+  def findUser(email: String, password: String) = users.filter(u => u.email === email && u.password === password)
 
 }
