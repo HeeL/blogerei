@@ -10,3 +10,19 @@ class Application extends Controller {
   }
 
 }
+
+/**
+ * Provide security features
+ */
+trait Secured {
+  self: Controller =>
+
+  def username(request: RequestHeader) = request.session.get("email")
+
+  def onUnauthorized(request: RequestHeader): Result
+
+  def IsAuthenticated(f: => String => Request[AnyContent] => Result) =
+    Security.Authenticated(username, onUnauthorized) { user =>
+      Action(request => f(user)(request))
+    }
+}

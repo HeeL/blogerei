@@ -1,6 +1,6 @@
 @(postForm: Form[Post], post_id: Int = 0)(implicit messages: Messages)
 
-@main("Post", "posts") {
+@main("Post", "new_post") {
 
 @helper.form(action = if(post_id > 0) routes.Posts.update(post_id) else routes.Posts.create()) {
     @helper.inputText(postForm("title"), 'class -> "form-control")

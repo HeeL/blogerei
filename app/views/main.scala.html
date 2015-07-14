@@ -43,8 +43,7 @@
                 <li @if(page_name == "about"){class="active"}><a href="@routes.Application.about()">About</a></li>
             </ul>
             <ul class="nav navbar-nav pull-right">
-                <li><a href="@routes.Posts.newPost()">New Post</a></li>
-                <li><a href="@routes.Auth.signInForm()">Sign In</a></li>
+                <li @if(page_name == "new_post"){class="active"}><a href="@routes.Posts.newPost()">New Post</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

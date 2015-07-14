@@ -15,7 +15,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import slick.driver.JdbcProfile
 
 
-class Posts extends Controller with PostTable with HasDatabaseConfig[JdbcProfile] {
+class Posts extends Controller with Secured with PostTable with HasDatabaseConfig[JdbcProfile] {
   val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
   import driver.api._
 
@@ -38,7 +38,8 @@ class Posts extends Controller with PostTable with HasDatabaseConfig[JdbcProfile
     )(Post.apply)(Post.unapply)
   )
 
-  def newPost = Action {
+  def newPost = IsAuthenticated { username =>
+    implicit request =>
     Ok(views.html.post_form(postForm))
   }
 
@@ -71,5 +72,7 @@ class Posts extends Controller with PostTable with HasDatabaseConfig[JdbcProfile
   def delete(id: Int) = Action.async {
     db.run(getPost(id).result).map(_ => Redirect(routes.Posts.index))
   }
+
+  def onUnauthorized(request: RequestHeader) = Results.Redirect(routes.Auth.signInForm())
 
 }
