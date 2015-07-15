@@ -5,10 +5,6 @@ import org.junit.runner._
 import play.api.test._
 import play.api.test.Helpers._
 
-/**
- * add your integration spec here.
- * An integration test will fire up a whole play application in a real (or headless) browser
- */
 @RunWith(classOf[JUnitRunner])
 class IntegrationSpec extends Specification {
 
@@ -16,9 +12,9 @@ class IntegrationSpec extends Specification {
 
     "work from within a browser" in new WithBrowser {
 
-      browser.goTo("http://localhost:" + port)
+      browser.goTo("http://localhost:" + port + "/about")
 
-      browser.pageSource must contain("Post Title")
+      browser.pageSource must contain("https://github.com/HeeL/blogerei")
     }
   }
 }
