@@ -23,7 +23,7 @@ trait PostTable {
     def * = (id, title, task, solution, solution2, tests) <> ((Post.apply _).tupled, Post.unapply)
   }
 
-  val posts = TableQuery[Posts]
+  val posts = TableQuery[Posts].sortBy(_.id.desc)
 
   def getPost(id: Int) = posts.filter(_.id === id)
 
