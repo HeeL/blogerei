@@ -38,12 +38,12 @@ class Posts extends Controller with Secured with PostTable with HasDatabaseConfi
     )(Post.apply)(Post.unapply)
   )
 
-  def newPost = (UserAction andThen isAuthenticatedFilter) { //username =>
+  def newPost = (UserAction andThen isAuthenticatedFilter) {
     implicit request =>
     Ok(views.html.post_form(postForm))
   }
 
-  def create = Action.async { implicit request =>
+  def create = (UserAction andThen isAuthenticatedFilter).async { implicit request =>
     postForm.bindFromRequest.fold(
       formWithErrors => {
         concurrent.Future { BadRequest(views.html.post_form(formWithErrors)) }
@@ -58,7 +58,7 @@ class Posts extends Controller with Secured with PostTable with HasDatabaseConfi
     db.run(getPost(id).result.headOption).map(res => Ok(views.html.post_form(postForm.fill(res.get), id)))
   }
 
-  def update(id: Int) = Action.async { implicit request =>
+  def update(id: Int) = (UserAction andThen isAuthenticatedFilter).async { implicit request =>
     postForm.bindFromRequest.fold(
       formWithErrors => {
         concurrent.Future { BadRequest(views.html.post_form(formWithErrors, id)) }
@@ -69,10 +69,8 @@ class Posts extends Controller with Secured with PostTable with HasDatabaseConfi
     )
   }
 
-  def delete(id: Int) = Action.async {
+  def delete(id: Int) = (UserAction andThen isAuthenticatedFilter).async {
     db.run(getPost(id).result).map(_ => Redirect(routes.Posts.index))
   }
-
-  def onUnauthorized(request: RequestHeader) = Results.Redirect(routes.Auth.signInForm())
 
 }

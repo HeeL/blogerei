@@ -20,15 +20,6 @@ class Application extends Controller {
 trait Secured {
   self: Controller =>
 
-  def username(request: RequestHeader) = request.session.get("email")
-
-  def onUnauthorized(request: RequestHeader): Result
-
-//  def IsAuthenticated(f: => String => Request[AnyContent] => Result) =
-//    Security.Authenticated(username, onUnauthorized) { user =>
-//      Action.async(request => f(user)(request))
-//    }
-
   class UserRequest[A](val username: Option[String], request: Request[A]) extends WrappedRequest[A](request)
 
   object UserAction extends ActionBuilder[UserRequest] with ActionTransformer[Request, UserRequest] {
