@@ -38,7 +38,7 @@ class Posts extends Controller with Secured with PostTable with HasDatabaseConfi
     )(Post.apply)(Post.unapply)
   )
 
-  def newPost = IsAuthenticated { username =>
+  def newPost = (UserAction andThen isAuthenticatedFilter) { //username =>
     implicit request =>
     Ok(views.html.post_form(postForm))
   }
@@ -54,7 +54,7 @@ class Posts extends Controller with Secured with PostTable with HasDatabaseConfi
     )
   }
 
-  def edit(id: Int) = Action.async {
+  def edit(id: Int) = (UserAction andThen isAuthenticatedFilter).async {
     db.run(getPost(id).result.headOption).map(res => Ok(views.html.post_form(postForm.fill(res.get), id)))
   }
 
