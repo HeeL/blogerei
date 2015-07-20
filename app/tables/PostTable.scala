@@ -1,10 +1,18 @@
 package tables
 
 import models.Post
+import scala.concurrent.Future
+import play.api.Play
+import play.api.db.slick.DatabaseConfigProvider
+import play.api.db.slick.HasDatabaseConfig
+import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import slick.driver.JdbcProfile
+import slick.lifted.Tag
 import slick.driver.PostgresDriver.api._
-import slick.driver._
 
-trait PostTable {
+
+trait PostTable extends HasDatabaseConfig[JdbcProfile]{
+  val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
 
   class Posts(tag: Tag) extends Table[Post](tag, "posts") {
 
@@ -23,12 +31,19 @@ trait PostTable {
     def * = (id, title, task, solution, solution2, tests) <> ((Post.apply _).tupled, Post.unapply)
   }
 
-  val posts = TableQuery[Posts].sortBy(_.id.desc)
+  val posts = TableQuery[Posts]
 
-  def getPost(id: Int) = posts.filter(_.id === id)
+  def getPosts = db.run(posts.sortBy(_.id.desc).result)
 
-  def updatePost(post_id: Int, post: Post) = getPost(post_id).update(post.copy(id = post_id))
+  def getPost(id: Int) = db.run(findPost(id).result.headOption)
 
-  def createPost(post: Post) = posts += post
+  def updatePost(post_id: Int, post: Post) = db.run(findPost(post_id).update(post.copy(id = post_id)))
+
+  def createPost(post: Post) = db.run(posts += post)
+
+  def deletePost(id: Int) = db.run(findPost(id).delete)
+
+  private def findPost(id: Int) = posts.filter(_.id === id)
+
 
 }

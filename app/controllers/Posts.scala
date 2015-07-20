@@ -9,22 +9,18 @@ import play.api.mvc._
 import play.api.Play.current
 import play.api.i18n.Messages.Implicits._
 import play.api.mvc.BodyParsers._
-import play.api.db.slick.DatabaseConfigProvider
-import play.api.db.slick.HasDatabaseConfig
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import slick.driver.JdbcProfile
 
 
-class Posts extends Controller with Secured with PostTable with HasDatabaseConfig[JdbcProfile] {
-  val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
+class Posts extends Controller with Secured with PostTable {
   import driver.api._
 
   def index = Action.async {
-    db.run(posts.result).map(res => Ok(views.html.index(res.toList)))
+    getPosts.map(res => Ok(views.html.index(res.toList)))
   }
 
   def show(id: Int) = Action.async {
-    db.run(getPost(id).result.headOption).map(res => Ok(views.html.show(res.get)))
+    getPost(id).map(res => Ok(views.html.show(res.get)))
   }
 
   val postForm = Form(
@@ -49,13 +45,13 @@ class Posts extends Controller with Secured with PostTable with HasDatabaseConfi
         concurrent.Future { BadRequest(views.html.post_form(formWithErrors)) }
       },
       post => {
-        db.run(createPost(post)).map(_ => Redirect(routes.Posts.index))
+        createPost(post).map(_ => Redirect(routes.Posts.index))
       }
     )
   }
 
   def edit(id: Int) = (UserAction andThen isAuthenticatedFilter).async {
-    db.run(getPost(id).result.headOption).map(res => Ok(views.html.post_form(postForm.fill(res.get), id)))
+    getPost(id).map(res => Ok(views.html.post_form(postForm.fill(res.get), id)))
   }
 
   def update(id: Int) = (UserAction andThen isAuthenticatedFilter).async { implicit request =>
@@ -64,13 +60,13 @@ class Posts extends Controller with Secured with PostTable with HasDatabaseConfi
         concurrent.Future { BadRequest(views.html.post_form(formWithErrors, id)) }
       },
       post => {
-        db.run(updatePost(id, post)).map(_ => Redirect(routes.Posts.index))
+        updatePost(id, post).map(_ => Redirect(routes.Posts.index))
       }
     )
   }
 
   def delete(id: Int) = (UserAction andThen isAuthenticatedFilter).async {
-    db.run(getPost(id).result).map(_ => Redirect(routes.Posts.index))
+    deletePost(id).map(_ => Redirect(routes.Posts.index))
   }
 
 }
