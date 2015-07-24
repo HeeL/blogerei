@@ -1,6 +1,6 @@
 @(post: Post)
 
-@main("Post Title", "posts") {
+@main(post.title, "posts") {
     <h1>@post.title</h1>
     <p>@Html(post.task)</p>
 
