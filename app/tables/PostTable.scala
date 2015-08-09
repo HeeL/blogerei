@@ -1,15 +1,14 @@
 package tables
 
 import models.Post
-import scala.concurrent.Future
 import play.api.Play
-import play.api.db.slick.DatabaseConfigProvider
-import play.api.db.slick.HasDatabaseConfig
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
 import slick.driver.JdbcProfile
-import slick.lifted.Tag
 import slick.driver.PostgresDriver.api._
+import slick.lifted.Tag
 
+
+object PostTable extends PostTable
 
 trait PostTable extends HasDatabaseConfig[JdbcProfile]{
   val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
@@ -44,6 +43,5 @@ trait PostTable extends HasDatabaseConfig[JdbcProfile]{
   def deletePost(id: Int) = db.run(findPost(id).delete)
 
   private def findPost(id: Int) = posts.filter(_.id === id)
-
 
 }

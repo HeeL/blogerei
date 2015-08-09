@@ -1,17 +1,16 @@
 package tables
 
 import models.User
-import scala.concurrent.Future
 import play.api.Play
-import play.api.db.slick.DatabaseConfigProvider
-import play.api.db.slick.HasDatabaseConfig
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfig}
 import slick.driver.JdbcProfile
-import slick.lifted.Tag
 import slick.driver.PostgresDriver.api._
+import slick.lifted.Tag
+
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
+object UserTable extends UserTable
 
 trait UserTable extends HasDatabaseConfig[JdbcProfile]{
   val dbConfig = DatabaseConfigProvider.get[JdbcProfile](Play.current)
